@@ -21,6 +21,20 @@ def get_data(_api: GhApi, query: str):
 def get_connectors() -> [pd.DataFrame, pd.DataFrame]:
     dataframes = pd.read_html(Path("connectors.html").read_text())
     sources_df, destinations_df = dataframes
+
+    # Pretty print 'Support Level'
+    sources_df["Support Level"] = sources_df["Support Level"].str.title()
+    destinations_df["Support Level"] = destinations_df["Support Level"].str.title()
+
+    # Restrict to useful columns
+    sources_df = sources_df[["Connector Name", "Support Level", "OSS", "Cloud"]]
+    destinations_df = destinations_df[["Connector Name", "Support Level", "OSS", "Cloud"]]
+
+    # Turn emojis into boolean (checkbox) column
+    for column in ("OSS", "Cloud"):
+        sources_df[column] = sources_df[column].apply(lambda x: x == "✅")
+        destinations_df[column] = destinations_df[column].apply(lambda x: x == "✅")
+
     return sources_df, destinations_df
 
 def format_path(path: str) -> str:
@@ -54,9 +68,9 @@ if data:
 
     st.subheader("All Connectors")
     st.write("Sources")
-    st.dataframe(sources_df)
+    st.dataframe(sources_df, use_container_width=True, hide_index=True)
     st.write("Destinations")
-    st.dataframe(destinations_df)
+    st.dataframe(destinations_df, use_container_width=True, hide_index=True)
 
     st.divider()
     with st.expander("Debug"):
