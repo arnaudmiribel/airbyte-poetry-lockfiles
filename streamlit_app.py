@@ -41,8 +41,8 @@ def get_connectors() -> [pd.DataFrame, pd.DataFrame]:
 
     # Turn emojis into boolean (checkbox) column
     for column in ("OSS", "Cloud"):
-        sources_df[column] = sources_df[column].apply(lambda x: x == "✅")
-        destinations_df[column] = destinations_df[column].apply(lambda x: x == "✅")
+        sources_df[column] = sources_df[column].eq("✅")
+        destinations_df[column] = destinations_df[column].eq("✅")
 
     return sources_df, destinations_df
 
