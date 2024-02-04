@@ -87,7 +87,7 @@ if poetry_data:
     )
     right.metric(
         "Percent migrated",
-        f"{poetry_data.total_count / (poetry_data.total_count + requirements_data.total_count):.0%}",
+        f"{poetry_data.total_count / (poetry_data.total_count + requirements_data.total_count):.2%}",
     )
 
     st.subheader("Migrated Connectors")
