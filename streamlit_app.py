@@ -27,7 +27,11 @@ data = get_data(
 )
 
 def format_path(path: str) -> str:
-    return path.removeprefix("airbyte-integrations/connectors/")
+    return (
+        path
+        .removeprefix("airbyte-integrations/connectors/")
+        .removesuffix("/poetry.lock")
+    )
 
 if data:
     st.subheader("Summary")
