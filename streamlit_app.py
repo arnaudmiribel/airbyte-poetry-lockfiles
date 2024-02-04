@@ -44,7 +44,7 @@ if data:
 
     st.divider()
   
-    with st.expander("Raw data"):
+    with st.expander("Debug"):
         st.caption("Query")
         st.code(QUERY)
         st.caption("Output")
