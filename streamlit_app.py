@@ -29,7 +29,7 @@ data = get_data(
 def format_path(path: str) -> str:
     return (
         path
-        .removeprefix("airbyte-integrations/connectors/")
+        .removeprefix("airbyte-integrations/connectors/destination-")
         .removesuffix("/poetry.lock")
     )
 
