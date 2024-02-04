@@ -1,8 +1,9 @@
 import streamlit as st
 from ghapi.all import GhApi
+from pathlib import Path
+import pandas as pd
 
-st.set_page_config(page_title="Poetry Migration", page_icon="🐙")
-
+# Constants
 QUERY = "repo:airbytehq/airbyte airbyte-integrations/connectors in:path poetry.lock"
 
 @st.cache_resource
@@ -16,6 +17,12 @@ def get_data(_api: GhApi, query: str):
     results = _api.search.code(q=query)
     return results
 
+@st.cache_data
+def get_connectors() -> [pd.DataFrame, pd.DataFrame]:
+    dataframes = pd.read_html(Path("connectors.html").read_text())
+    sources_df, destinations_df = dataframes
+    return sources_df, destinations_df
+
 api = get_api()
 
 st.title("🐙")
@@ -26,24 +33,28 @@ data = get_data(
     query=QUERY,
 )
 
+sources_df, destinations_df = get_connectors()
+
 def format_path(path: str) -> str:
-    return (
-        path
-        .removeprefix("airbyte-integrations/connectors/destination-")
-        .removesuffix("/poetry.lock")
-    )
+    return path.removeprefix("airbyte-integrations/connectors/")
+
 
 if data:
     st.subheader("Summary")
     total_count = data.total_count
     st.metric("Num. connectors using poetry.lock", f"{total_count}  🎉")
 
-    st.subheader("Connectors")
+    st.subheader("Migrated Connectors")
     for item in dict(data)["items"]:
         st.link_button(format_path(item.path), item.html_url, use_container_width=True)
 
+    st.subheader("All Connectors")
+    st.write("Sources")
+    st.dataframe(sources_df)
+    st.write("Destinations")
+    st.dataframe(destinations_df)
+
     st.divider()
-  
     with st.expander("Debug"):
         st.caption("Query")
         st.code(QUERY)
