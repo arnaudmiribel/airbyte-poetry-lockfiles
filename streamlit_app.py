@@ -9,7 +9,7 @@ QUERY = "repo:airbytehq/airbyte airbyte-integrations/connectors in:path poetry.l
 @st.cache_resource
 def get_api():
     return GhApi(
-        token=st.secrets.ACCESS_TOKEN,
+        token=ACCESS_TOKEN,
     )
 
 @st.cache_data(ttl=24 * 60 * 60)
@@ -23,10 +23,14 @@ def get_connectors() -> [pd.DataFrame, pd.DataFrame]:
     sources_df, destinations_df = dataframes
     return sources_df, destinations_df
 
-api = get_api()
+def format_path(path: str) -> str:
+    return (
+        path
+        .removeprefix("airbyte-integrations/connectors/destination-")
+        .removesuffix("/poetry.lock")
+    )
 
-st.title("🐙")
-st.header("Poetry Lock Files in Airbyte Connectors")
+api = get_api()
 
 data = get_data(
     _api=api,
@@ -35,8 +39,8 @@ data = get_data(
 
 sources_df, destinations_df = get_connectors()
 
-def format_path(path: str) -> str:
-    return path.removeprefix("airbyte-integrations/connectors/")
+st.title("🐙")
+st.header("Poetry Lock Files in Airbyte Connectors")
 
 
 if data:
