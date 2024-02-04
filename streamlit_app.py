@@ -1,6 +1,7 @@
 import streamlit as st
 from ghapi.all import GhApi
-from matplotlib import pyplot as plt
+
+st.set_page_config(page_title="Poetry Migration", page_icon="🐙")
 
 QUERY = "repo:airbytehq/airbyte airbyte-integrations/connectors in:path poetry.lock"
 
