@@ -9,7 +9,7 @@ QUERY = "repo:airbytehq/airbyte airbyte-integrations/connectors in:path poetry.l
 @st.cache_resource
 def get_api():
     return GhApi(
-        token=ACCESS_TOKEN,
+        token=st.secrets.ACCESS_TOKEN,
     )
 
 @st.cache_data(ttl=24 * 60 * 60)
