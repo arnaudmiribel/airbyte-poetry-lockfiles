@@ -56,6 +56,13 @@ sources_df, destinations_df = get_connectors()
 st.title("🐙")
 st.header("Poetry Lock Files in Airbyte Connectors")
 
+""" This app helps monitoring our progress as we migrate 
+all Airbyte connectors to Poetry. To do so, we lookup the 
+amount of `poetry.lock` files under the `airbyte-integrations/connectors` 
+directory of the main `airbytehq/airbyte` repository. 
+
+Reach out to @alafanechere for feedback or help!
+"""
 
 if data:
     st.subheader("Summary")
