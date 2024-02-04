@@ -45,6 +45,9 @@ if data:
     st.divider()
   
     with st.expander("Raw data"):
+        st.caption("Query")
+        st.code(QUERY)
+        st.caption("Output")
         st.json(data)
 else:
     st.error("No data to display")
